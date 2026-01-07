@@ -1,0 +1,45 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+# Local testing configuration (optional, requires npx netlify-cms-proxy-server)
+local_backend: true
+
+collections:
+  - name: "data"
+    label: "Lab Data"
+    files:
+      - name: "inventory"
+        label: "Market Menu"
+        file: "src/data/inventory.json"
+        editor:
+          preview: false
+        fields:
+          - { label: "Batch Number", name: "batch_no", widget: "string", hint: "e.g. 2026-01-08" }
+          - label: "Inventory Items"
+            name: "items"
+            widget: "list"
+            fields:
+              - { label: "Product Name", name: "name", widget: "string" }
+              - { label: "Price", name: "price", widget: "string", default: "$0.00" }
+              - { 
+                  label: "Status", 
+                  name: "status", 
+                  widget: "select", 
+                  options: ["IN STOCK", "LOW", "SOLD OUT", "COMING SOON"],
+                  default: "IN STOCK"
+                }
+              - {
+                  label: "Label Color (Aesthetic)",
+                  name: "status_color",
+                  widget: "select",
+                  options: [
+                    { label: "Acid Sprout (Green)", value: "sprout" },
+                    { label: "Warning Orange", value: "orange-400" },
+                    { label: "Dead Gray", value: "gray-500" }
+                  ],
+                  default: "sprout"
+                }

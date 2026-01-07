@@ -1,0 +1,29 @@
+{
+    "batch_no": "2026-01-08",
+    "items": [
+        {
+            "name": "Living Soil Salad Mix",
+            "price": "$8.00",
+            "status": "IN STOCK",
+            "status_color": "sprout"
+        },
+        {
+            "name": "Spicy Radishes (Bunch)",
+            "price": "$4.00",
+            "status": "LOW",
+            "status_color": "orange-400"
+        },
+        {
+            "name": "Pasture-Raised Duck Eggs",
+            "price": "-----",
+            "status": "SOLD OUT",
+            "status_color": "gray-500"
+        },
+        {
+            "name": "Fermented Kimchi (16oz)",
+            "price": "$12.00",
+            "status": "IN STOCK",
+            "status_color": "sprout"
+        }
+    ]
+}

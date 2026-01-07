@@ -1,0 +1,92 @@
+---
+---
+
+<section id="compost" class="bg-carbon text-isotope py-24 px-4 md:px-8 relative overflow-hidden">
+    <!-- Texture Overlay for dark mode -->
+    <div class="absolute inset-0 bg-noise opacity-10 pointer-events-none"></div>
+
+    <div class="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-16 relative z-10">
+        <div>
+            <div class="inline-block px-3 py-1 border border-sprout/30 rounded-full text-sprout font-mono text-xs uppercase mb-6">
+                Project Alpha
+            </div>
+            <h2 class="text-5xl md:text-7xl font-display font-bold uppercase leading-none mb-6">
+                Compost <br/> Network
+            </h2>
+            <p class="font-sans text-lg text-isotope/80 leading-relaxed mb-8">
+                We are decentralizing waste management. Join the waitlist to bring a drop-off site to your block. 
+                Turn your scraps into soil, not landfill gas.
+            </p>
+            
+            <ul class="space-y-4 font-mono text-sm text-sprout">
+                <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-sprout rounded-full"></span>
+                    Local Cycle
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-sprout rounded-full"></span>
+                    Community Powered
+                </li>
+                <li class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-sprout rounded-full"></span>
+                    Flavor Maximized
+                </li>
+            </ul>
+        </div>
+
+        <div class="bg-isotope/5 border border-isotope/10 p-8 rounded-lg backdrop-blur-sm">
+            <form 
+                name="compost-waitlist" 
+                method="POST" 
+                data-netlify="true" 
+                action="/success"
+                class="flex flex-col gap-6"
+            >
+                <div>
+                    <label for="name" class="block font-mono text-xs uppercase text-isotope/60 mb-2">Codename</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        placeholder="John Doe"
+                        required
+                        class="w-full bg-transparent border-b border-isotope/30 py-2 text-isotope focus:outline-none focus:border-sprout transition-colors placeholder:text-isotope/20 font-sans"
+                    />
+                </div>
+
+                <div>
+                    <label for="email" class="block font-mono text-xs uppercase text-isotope/60 mb-2">Comms Frequency</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        name="email" 
+                        placeholder="john@example.com"
+                        required
+                        class="w-full bg-transparent border-b border-isotope/30 py-2 text-isotope focus:outline-none focus:border-sprout transition-colors placeholder:text-isotope/20 font-sans"
+                    />
+                </div>
+
+                <div>
+                    <label for="zip" class="block font-mono text-xs uppercase text-sprout mb-2">Target Sector (Zip Code) *</label>
+                    <input 
+                        type="text" 
+                        id="zip" 
+                        name="zip" 
+                        placeholder="77055"
+                        required
+                        pattern="[0-9]*"
+                        class="w-full bg-transparent border-b border-isotope/30 py-2 text-isotope focus:outline-none focus:border-sprout transition-colors placeholder:text-isotope/20 font-mono text-xl tracking-widest"
+                    />
+                </div>
+
+                <button type="submit" class="mt-4 w-full bg-sprout text-carbon font-mono uppercase font-bold py-4 rounded-full hover:bg-white transition-colors">
+                    Initiate Sequence
+                </button>
+                
+                <p class="text-[10px] text-center text-isotope/40 font-mono uppercase">
+                    By clicking, you agree to join the network.
+                </p>
+            </form>
+        </div>
+    </div>
+</section>

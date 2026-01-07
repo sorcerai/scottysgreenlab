@@ -1,0 +1,46 @@
+---
+import '../styles/global.css';
+import '@fontsource/inter';
+import '@fontsource/jetbrains-mono';
+import '@fontsource/space-grotesk';
+
+interface Props {
+	title: string;
+	description?: string;
+}
+
+const { title, description = "Scotty's Green Lab - Regenerative Agriculture in Spring Branch" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="description" content={description} />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script>
+      // Redirect to Admin after login
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+  </head>
+	<body class="bg-isotope text-carbon overflow-x-hidden selection:bg-sprout selection:text-carbon relative">
+		<!-- Global Noise Overlay -->
+		<div class="fixed inset-0 pointer-events-none z-50 opacity-40 bg-noise mix-blend-multiply"></div>
+		
+		<main class="w-full relative z-10">
+			<slot />
+		</main>
+	</body>
+</html>

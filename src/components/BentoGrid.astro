@@ -1,0 +1,78 @@
+---
+---
+
+<section id="science" class="py-24 px-4 md:px-8 bg-isotope border-b border-carbon">
+  <div class="max-w-7xl mx-auto">
+    <div class="mb-12 flex items-baseline gap-4">
+      <h2 class="text-4xl md:text-6xl font-display font-bold uppercase">The Methodology</h2>
+      <div class="h-px bg-carbon flex-grow"></div>
+      <div class="font-mono text-sm">[SEC_B]</div>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-px bg-carbon border border-carbon rounded-lg overflow-hidden">
+      <!-- Box 1: The Cycle (Large) -->
+      <div class="md:col-span-2 bg-isotope p-8 md:p-12 relative min-h-[400px] group hover:bg-white transition-colors">
+        <div class="absolute top-6 left-6 font-mono text-xs uppercase border border-carbon px-2 rounded-full">Fig 1. The Cycle</div>
+        
+        <div class="flex flex-col items-center justify-center h-full mt-8">
+            <!-- Simplified SVG Diagram -->
+            <svg viewBox="0 0 400 200" class="w-full max-w-md drop-shadow-lg">
+                <defs>
+                   <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                     <path d="M0,0 L0,6 L9,3 z" fill="#18181B" />
+                   </marker>
+                </defs>
+                <circle cx="50" cy="100" r="40" stroke="#18181B" stroke-width="2" fill="none" />
+                <text x="50" y="105" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#18181B">SCRAPS</text>
+
+                <line x1="90" y1="100" x2="160" y2="100" stroke="#18181B" stroke-width="2" marker-end="url(#arrow)" />
+
+                <circle cx="200" cy="100" r="40" stroke="#18181B" stroke-width="2" fill="#CCFF00" />
+                <text x="200" y="105" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#18181B" font-weight="bold">WORMS</text>
+
+                <line x1="240" y1="100" x2="310" y2="100" stroke="#18181B" stroke-width="2" marker-end="url(#arrow)" />
+
+                <circle cx="350" cy="100" r="40" stroke="#18181B" stroke-width="2" fill="none" />
+                <text x="350" y="105" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#18181B">SOIL</text>
+            </svg>
+            <p class="font-sans text-xl mt-8 text-center max-w-sm">From local waste to living soil. <br/>Closure of the loop.</p>
+        </div>
+      </div>
+
+      <!-- Box 2: Fermentation -->
+      <div class="bg-isotope p-6 flex flex-col justify-between hover:bg-white transition-colors relative overflow-hidden group">
+         <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1599309659341-3b5ce8d20c5d?q=80&w=1960&auto=format&fit=crop')] bg-cover bg-center grayscale group-hover:grayscale-0 transition-all duration-500 opacity-20"></div>
+         <div class="relative z-10">
+            <h3 class="font-display text-2xl uppercase mb-2">Fermentation</h3>
+            <p class="font-sans text-sm text-carbon/80">Probiotic load optimized for gut health. We employ lacto-fermentation.</p>
+         </div>
+         <div class="font-mono text-sprout bg-carbon px-2 py-1 self-start rounded-sm text-xs mt-4 relative z-10">LOAD: HIGH</div>
+      </div>
+
+      <!-- Box 3: The Stat -->
+      <div class="bg-carbon p-6 flex flex-col items-center justify-center text-isotope md:col-span-1">
+        <div class="text-6xl font-display font-bold text-sprout mb-2">300%</div>
+        <div class="font-mono text-center text-sm uppercase tracking-widest">More Nutrient<br>Density</div>
+      </div>
+      
+       <!-- Box 4: Filler / Aesthetic -->
+       <div class="md:col-span-3 bg-isotope p-4 border-t border-carbon text-center">
+            <div class="marquee-container overflow-hidden whitespace-nowrap">
+                <div class="animate-marquee inline-block font-mono text-xs uppercase tracking-widest text-carbon/40">
+                    FRESH HARVEST // LIVING SOIL // SPRING BRANCH // REGENERATIVE // NO TILL // LOCAL // FRESH HARVEST // LIVING SOIL // SPRING BRANCH // REGENERATIVE // NO TILL // LOCAL
+                </div>
+            </div>
+       </div>
+    </div>
+  </div>
+</section>
+
+<style>
+.animate-marquee {
+  animation: marquee 20s linear infinite;
+}
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+</style>

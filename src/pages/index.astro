@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import Hero from '../components/Hero.astro';
+import BentoGrid from '../components/BentoGrid.astro';
+import Menu from '../components/Menu.astro';
+import CompostForm from '../components/CompostForm.astro';
+---
+
+<Layout title="Scotty's Green Lab | Soil Science & Fermentation">
+	<Navbar />
+	<main>
+		<Hero />
+		<BentoGrid />
+		<Menu />
+		<CompostForm />
+	</main>
+	
+	<footer class="bg-carbon text-isotope/40 py-12 border-t border-isotope/10">
+		<div class="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+			<div class="font-mono text-xs uppercase">
+				&copy; 2026 Scotty's Green Lab. All Systems Normal.
+			</div>
+			<div class="flex gap-6 font-mono text-xs uppercase">
+				<a href="#" class="hover:text-sprout transition-colors">Instagram</a>
+				<a href="#" class="hover:text-sprout transition-colors">Email</a>
+			</div>
+		</div>
+	</footer>
+</Layout>

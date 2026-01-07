@@ -1,0 +1,63 @@
+---
+import inventory from '../data/inventory.json';
+
+const getStatusColor = (status: string) => {
+    switch (status) {
+        case 'IN STOCK': return 'bg-sprout text-carbon border-sprout';
+        case 'LOW': return 'bg-orange-400 text-carbon border-orange-400';
+        case 'SOLD OUT': return 'bg-transparent text-carbon/40 border-carbon/20 decoration-line-through';
+        default: return 'bg-carbon text-isotope border-carbon';
+    }
+}
+---
+
+<section id="menu" class="py-24 px-4 md:px-8 bg-isotope min-h-[50vh]">
+  <div class="max-w-4xl mx-auto relative">
+    <!-- Clipboard styling -->
+    <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-32 h-12 bg-carbon rounded-full z-10 hidden md:block"></div>
+    
+    <div class="bg-white border-2 border-carbon rounded-sm shadow-[8px_8px_0px_0px_rgba(24,24,27,1)] p-8 md:p-12 relative overflow-hidden">
+        <!-- Header -->
+        <div class="flex justify-between items-end border-b-2 border-dashed border-carbon/20 pb-8 mb-8">
+            <div>
+                <h2 class="text-4xl md:text-5xl font-display font-bold uppercase mb-2">Market Menu</h2>
+                <div class="font-mono text-xs text-carbon/60 uppercase">Source: Spring Branch Farm</div>
+            </div>
+            <div class="font-mono text-xl md:text-2xl font-bold bg-isotope px-4 py-2 border border-carbon rounded-sm transform rotate-2">
+                BATCH: {inventory.batch_no}
+            </div>
+        </div>
+
+        <!-- List -->
+        <div class="space-y-6">
+            {inventory.items.map((item) => (
+                <div class="flex flex-col md:flex-row md:items-center justify-between group cursor-default">
+                    <div class="flex items-baseline gap-4 w-full">
+                        <span class={`font-mono text-lg font-bold ${item.status === 'SOLD OUT' ? 'text-carbon/40 line-through' : 'text-carbon'}`}>
+                            {item.name}
+                        </span>
+                        <div class="flex-grow border-b border-dotted border-carbon/30"></div>
+                        <span class="font-mono text-lg">{item.price}</span>
+                    </div>
+                    
+                    <div class={`mt-2 md:mt-0 md:ml-6 px-3 py-1 text-xs font-mono font-bold uppercase border rounded-full whitespace-nowrap ${getStatusColor(item.status)}`}>
+                        {item.status}
+                    </div>
+                </div>
+            ))}
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-12 pt-8 border-t-2 border-carbon flex justify-center">
+             <p class="font-sans text-center text-sm max-w-md">
+                Pickup usually available Saturdays 10am - 2pm. <br/>
+                First come, first served.
+             </p>
+        </div>
+        
+        <!-- Holes -->
+        <div class="absolute top-8 left-1/2 -translate-x-12 w-4 h-4 rounded-full bg-isotope border border-carbon hidden md:block"></div>
+        <div class="absolute top-8 right-1/2 translate-x-12 w-4 h-4 rounded-full bg-isotope border border-carbon hidden md:block"></div>
+    </div>
+  </div>
+</section>
