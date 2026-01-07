@@ -29,27 +29,35 @@ const getStatusColor = (status: string) => {
         </div>
 
         <!-- List -->
-        <div class="space-y-6">
+        <div class="space-y-8">
             {inventory.items.map((item) => (
-                <div class="flex flex-col md:flex-row md:items-center justify-between group cursor-default">
-                    <div class="flex items-baseline gap-4 w-full">
-                        <span class={`font-mono text-lg font-bold ${item.status === 'SOLD OUT' ? 'text-carbon/40 line-through' : 'text-carbon'}`}>
-                            {item.name}
-                        </span>
-                        <div class="flex-grow border-b border-dotted border-carbon/30"></div>
-                        <span class="font-mono text-lg">{item.price}</span>
+                <div class="flex flex-col group cursor-default">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+                        <div class="flex items-baseline gap-4 w-full">
+                            <span class={`font-mono text-lg font-bold ${item.status === 'SOLD OUT' ? 'text-carbon/40 line-through' : 'text-carbon'}`}>
+                                {item.name}
+                            </span>
+                            <div class="flex-grow border-b border-dotted border-carbon/30"></div>
+                            <span class="font-mono text-lg">{item.price}</span>
+                        </div>
+                        
+                        <div class={`mt-2 md:mt-0 md:ml-6 px-3 py-1 text-xs font-mono font-bold uppercase border rounded-full whitespace-nowrap ${getStatusColor(item.status)}`}>
+                            {item.status}
+                        </div>
                     </div>
-                    
-                    <div class={`mt-2 md:mt-0 md:ml-6 px-3 py-1 text-xs font-mono font-bold uppercase border rounded-full whitespace-nowrap ${getStatusColor(item.status)}`}>
-                        {item.status}
-                    </div>
+                    {item.description && (
+                         <p class="font-sans text-sm text-carbon/70 italic max-w-2xl">{item.description}</p>
+                    )}
                 </div>
             ))}
         </div>
 
         <!-- Footer -->
-        <div class="mt-12 pt-8 border-t-2 border-carbon flex justify-center">
-             <p class="font-sans text-center text-sm max-w-md">
+        <div class="mt-12 pt-8 border-t-2 border-carbon flex flex-col items-center text-center gap-4">
+             <div class="font-mono text-xs text-sprout bg-carbon px-2 py-1 uppercase">
+                Warning: Contains living microbes. Do not heat.
+             </div>
+             <p class="font-sans text-sm max-w-md">
                 Pickup usually available Saturdays 10am - 2pm. <br/>
                 First come, first served.
              </p>

@@ -3,25 +3,36 @@
     "items": [
         {
             "name": "Living Soil Salad Mix",
+            "description": "Grown in soil with full prokaryotic association. Nutrient density you can taste.",
             "price": "$8.00",
             "status": "IN STOCK",
             "status_color": "sprout"
         },
         {
             "name": "Spicy Radishes (Bunch)",
+            "description": "Pulled from the ground this morning. Soil banditry proof.",
             "price": "$4.00",
             "status": "LOW",
             "status_color": "orange-400"
         },
         {
             "name": "Pasture-Raised Duck Eggs",
+            "description": "The result of carbon capping and happy ducks.",
             "price": "-----",
             "status": "SOLD OUT",
             "status_color": "gray-500"
         },
         {
             "name": "Fermented Kimchi (16oz)",
+            "description": "A seven-vegetable biodiversity bomb. 100% fermentation-derived sourness. No vinegar. Gives your gut the 'pass-through' update it needs.",
             "price": "$12.00",
+            "status": "IN STOCK",
+            "status_color": "sprout"
+        },
+        {
+            "name": "Escabeche",
+            "description": "Jalapenos, onions, carrots. Crunchy, spicy, and alive. The bacteria ring on the bottom proves it's working.",
+            "price": "$10.00",
             "status": "IN STOCK",
             "status_color": "sprout"
         }
