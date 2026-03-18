@@ -1,0 +1,60 @@
+---
+const faqs = [
+	{
+		question: "What is living soil?",
+		answer: "Living soil contains billions of microorganisms per gram that form symbiotic relationships with plant roots. Unlike dead dirt, living soil provides bio-available nutrients through prokaryotic association, producing crops with up to 300% more nutrient density."
+	},
+	{
+		question: "What is the Law of Returns?",
+		answer: "The Law of Returns is Scotty's methodology: waste becomes compost, compost feeds soil biology, biology grows food. It's a closed-loop carbon cycle where kitchen scraps, yard waste, and organic matter are returned to the soil rather than sent to landfill."
+	},
+	{
+		question: "How does fermentation preserve food?",
+		answer: "Lacto-fermentation uses naturally occurring Lactobacillus bacteria to convert sugars into lactic acid, creating an environment that preserves food without vinegar or heat processing. The result is a probiotic-rich, living food that supports gut microbiome diversity."
+	},
+	{
+		question: "Where is Scotty's Gardening Lab?",
+		answer: "Spring Branch, Texas (Lat: 29.79N). We grow and ferment locally, using regenerative practices adapted to the Central Texas Hill Country climate and Balcones Canyonlands ecology."
+	},
+	{
+		question: "What makes your produce different?",
+		answer: "Every crop is grown in living soil with full prokaryotic association — no synthetic fertilizers, no tilling, no shortcuts. Lab-tested at up to 300% higher nutrient density compared to conventional grocery store produce."
+	},
+	{
+		question: "How do I get your products?",
+		answer: "Check the Market Menu above for current inventory and pricing. Products are available for local pickup in Spring Branch, TX. Join the Decay Cycle waitlist below to get notified about new batches and our composting initiative."
+	}
+];
+---
+
+<section id="faq" class="py-24 px-4 md:px-8 bg-isotope border-b border-carbon">
+	<div class="max-w-7xl mx-auto">
+		<div class="mb-12 flex items-baseline gap-4">
+			<h2 class="text-4xl md:text-6xl font-display font-bold uppercase">
+				Frequently Asked Questions
+			</h2>
+			<div class="h-px bg-carbon flex-grow"></div>
+			<div class="font-mono text-sm">[FAQ]</div>
+		</div>
+
+		<div class="border border-carbon rounded-lg overflow-hidden">
+			{faqs.map((faq, i) => (
+				<details class:list={["group", i < faqs.length - 1 && "border-b border-carbon"]}>
+					<summary class="flex items-center justify-between gap-4 p-6 cursor-pointer hover:bg-white transition-colors select-none">
+						<h3 class="font-display text-lg md:text-xl font-bold uppercase">
+							{faq.question}
+						</h3>
+						<span class="font-mono text-xs text-carbon/40 shrink-0 group-open:rotate-45 transition-transform duration-200">
+							[+]
+						</span>
+					</summary>
+					<div class="px-6 pb-6 pt-0">
+						<p class="font-sans text-base md:text-lg leading-relaxed text-carbon/80 max-w-3xl">
+							{faq.answer}
+						</p>
+					</div>
+				</details>
+			))}
+		</div>
+	</div>
+</section>

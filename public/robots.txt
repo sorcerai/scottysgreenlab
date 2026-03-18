@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://scottysgardeninglab.com/sitemap-index.xml
+
+# AI & LLM crawlers
+# llms.txt: https://scottysgardeninglab.com/llms.txt

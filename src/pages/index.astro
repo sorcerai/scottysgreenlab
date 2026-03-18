@@ -3,23 +3,117 @@ import Layout from '../layouts/Layout.astro';
 import Navbar from '../components/Navbar.astro';
 import Hero from '../components/Hero.astro';
 import BentoGrid from '../components/BentoGrid.astro';
+import FAQ from '../components/FAQ.astro';
 import Menu from '../components/Menu.astro';
 import CompostForm from '../components/CompostForm.astro';
+import inventory from '../data/inventory.json';
+
+const siteUrl = "https://scottysgardeninglab.com";
+
+const statusMap: Record<string, string> = {
+	"IN STOCK": "https://schema.org/InStock",
+	"LOW": "https://schema.org/LimitedAvailability",
+	"SOLD OUT": "https://schema.org/SoldOut"
+};
+
+const products = inventory.items.map(item => ({
+	"@type": "Product",
+	"name": item.name,
+	"description": item.description,
+	"offers": {
+		"@type": "Offer",
+		"price": item.price.replace("$", "").replace("-----", "0"),
+		"priceCurrency": "USD",
+		"availability": statusMap[item.status] || "https://schema.org/InStock"
+	}
+}));
+
+const faqs = [
+	{
+		question: "What is living soil?",
+		answer: "Living soil contains billions of microorganisms per gram that form symbiotic relationships with plant roots. Unlike dead dirt, living soil provides bio-available nutrients through prokaryotic association, producing crops with up to 300% more nutrient density."
+	},
+	{
+		question: "What is the Law of Returns?",
+		answer: "The Law of Returns is Scotty's methodology: waste becomes compost, compost feeds soil biology, biology grows food. It's a closed-loop carbon cycle where kitchen scraps, yard waste, and organic matter are returned to the soil rather than sent to landfill."
+	},
+	{
+		question: "How does fermentation preserve food?",
+		answer: "Lacto-fermentation uses naturally occurring Lactobacillus bacteria to convert sugars into lactic acid, creating an environment that preserves food without vinegar or heat processing. The result is a probiotic-rich, living food that supports gut microbiome diversity."
+	},
+	{
+		question: "Where is Scotty's Gardening Lab?",
+		answer: "Spring Branch, Texas (Lat: 29.79N). We grow and ferment locally, using regenerative practices adapted to the Central Texas Hill Country climate and Balcones Canyonlands ecology."
+	},
+	{
+		question: "What makes your produce different?",
+		answer: "Every crop is grown in living soil with full prokaryotic association — no synthetic fertilizers, no tilling, no shortcuts. Lab-tested at up to 300% higher nutrient density compared to conventional grocery store produce."
+	},
+	{
+		question: "How do I get your products?",
+		answer: "Check the Market Menu above for current inventory and pricing. Products are available for local pickup in Spring Branch, TX. Join the Decay Cycle waitlist below to get notified about new batches and our composting initiative."
+	}
+];
+
+const pageSchema = {
+	"@context": "https://schema.org",
+	"@graph": [
+		...products,
+		{
+			"@type": "FAQPage",
+			"mainEntity": faqs.map(faq => ({
+				"@type": "Question",
+				"name": faq.question,
+				"acceptedAnswer": {
+					"@type": "Answer",
+					"text": faq.answer
+				}
+			}))
+		},
+		{
+			"@type": "SiteNavigationElement",
+			"name": "Harvest",
+			"url": siteUrl + "/#menu"
+		},
+		{
+			"@type": "SiteNavigationElement",
+			"name": "Science",
+			"url": siteUrl + "/#science"
+		},
+		{
+			"@type": "SiteNavigationElement",
+			"name": "Network",
+			"url": siteUrl + "/#compost"
+		},
+		{
+			"@type": "BreadcrumbList",
+			"itemListElement": [
+				{
+					"@type": "ListItem",
+					"position": 1,
+					"name": "Home",
+					"item": siteUrl
+				}
+			]
+		}
+	]
+};
 ---
 
-<Layout title="Scotty's Green Lab | Soil Science & Fermentation">
+<Layout title="Scotty's Gardening Lab | Soil Science & Fermentation">
 	<Navbar />
 	<main>
 		<Hero />
 		<BentoGrid />
+		<FAQ />
 		<Menu />
 		<CompostForm />
 	</main>
-	
+
 	<footer class="bg-carbon text-isotope/40 py-12 border-t border-isotope/10">
 		<div class="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
 			<div class="font-mono text-xs uppercase">
-				&copy; 2026 Scotty's Green Lab. All Systems Normal.
+				&copy; 2026 Scotty's Gardening Lab. All Systems Normal.
 			</div>
 			<div class="flex gap-6 font-mono text-xs uppercase">
 				<a href="#" class="hover:text-sprout transition-colors">Instagram</a>
@@ -27,4 +121,6 @@ import CompostForm from '../components/CompostForm.astro';
 			</div>
 		</div>
 	</footer>
+
+	<script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
 </Layout>

@@ -7,9 +7,23 @@ import '@fontsource/space-grotesk';
 interface Props {
 	title: string;
 	description?: string;
+	image?: string;
+	url?: string;
+	type?: string;
 }
 
-const { title, description = "Scotty's Green Lab - Regenerative Agriculture in Spring Branch" } = Astro.props;
+const siteUrl = "https://scottysgardeninglab.com";
+
+const {
+	title,
+	description = "Scotty's Gardening Lab grows nutrient-dense food using living soil and fermentation in Spring Branch, TX. Shop salad mix, kimchi, duck eggs, and more.",
+	image = "/og-image.jpg",
+	url,
+	type = "website"
+} = Astro.props;
+
+const canonicalUrl = url || new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = image.startsWith("http") ? image : new URL(image, siteUrl).href;
 ---
 
 <!doctype html>
@@ -19,26 +33,89 @@ const { title, description = "Scotty's Green Lab - Regenerative Agriculture in S
 		<meta name="description" content={description} />
 		<meta name="viewport" content="width=device-width" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta name="theme-color" content="#18181B" />
 		<meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <script>
-      // Redirect to Admin after login
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-      }
-    </script>
-  </head>
+		<title>{title}</title>
+
+		<!-- Open Graph -->
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:type" content={type} />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:site_name" content="Scotty's Gardening Lab" />
+		<meta property="og:locale" content="en_US" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={ogImage} />
+
+		<!-- Sitemap -->
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<!-- Google Analytics -->
+		<script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-DHRD5J7VRW"></script>
+		<script is:inline>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-DHRD5J7VRW');
+		</script>
+
+		<!-- Site-wide JSON-LD -->
+		<script type="application/ld+json" set:html={JSON.stringify({
+			"@context": "https://schema.org",
+			"@graph": [
+				{
+					"@type": "Organization",
+					"@id": siteUrl + "/#organization",
+					"name": "Scotty's Gardening Lab",
+					"url": siteUrl,
+					"description": "Regenerative agriculture lab growing nutrient-dense food through living soil science and lacto-fermentation in Spring Branch, TX.",
+					"address": {
+						"@type": "PostalAddress",
+						"addressLocality": "Spring Branch",
+						"addressRegion": "TX",
+						"addressCountry": "US"
+					},
+					"geo": {
+						"@type": "GeoCoordinates",
+						"latitude": 29.79,
+						"longitude": -98.38
+					},
+					"knowsAbout": ["Regenerative Agriculture", "Living Soil", "Fermentation", "Nutrient Density"]
+				},
+				{
+					"@type": "WebSite",
+					"@id": siteUrl + "/#website",
+					"name": "Scotty's Gardening Lab",
+					"url": siteUrl,
+					"publisher": { "@id": siteUrl + "/#organization" }
+				}
+			]
+		})} />
+
+		<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+		<script>
+			// Redirect to Admin after login
+			if (window.netlifyIdentity) {
+				window.netlifyIdentity.on("init", user => {
+					if (!user) {
+						window.netlifyIdentity.on("login", () => {
+							document.location.href = "/admin/";
+						});
+					}
+				});
+			}
+		</script>
+	</head>
 	<body class="bg-isotope text-carbon overflow-x-hidden selection:bg-sprout selection:text-carbon relative">
 		<!-- Global Noise Overlay -->
 		<div class="fixed inset-0 pointer-events-none z-50 opacity-40 bg-noise mix-blend-multiply"></div>
-		
+
 		<main class="w-full relative z-10">
 			<slot />
 		</main>
