@@ -1,0 +1,120 @@
+{
+  "publish_gate_threshold": 75,
+  "weights": {
+    "structural_completeness": 0.20,
+    "seo_readiness": 0.20,
+    "citation_readiness": 0.20,
+    "content_depth": 0.15,
+    "readability": 0.10,
+    "compliance": 0.15
+  },
+  "thresholds": {
+    "structural": {
+      "min_word_count": 1500,
+      "max_word_count": 3500,
+      "required_components": ["TLDRBlock", "FAQSection"],
+      "min_cta_blocks": 2,
+      "min_h2_sections": 3
+    },
+    "seo": {
+      "title_min_length": 40,
+      "title_max_length": 60,
+      "meta_desc_min_length": 120,
+      "meta_desc_max_length": 155,
+      "min_internal_links": 3,
+      "max_internal_links": 8,
+      "min_external_links": 1
+    },
+    "citation": {
+      "min_data_points": 5,
+      "min_faq_items": 4,
+      "max_faq_items": 8,
+      "min_named_entities": 3
+    },
+    "depth": {
+      "min_scenarios": 2,
+      "min_number_density_per_1k": 3
+    },
+    "readability": {
+      "max_avg_sentence_length": 20,
+      "max_paragraph_words": 75,
+      "max_filler_density_per_1k": 5,
+      "max_passive_voice_pct": 10
+    }
+  },
+  "compliance_rulesets": {
+    "general": {
+      "banned_phrases": [
+        "guaranteed approval",
+        "guaranteed funding",
+        "no risk",
+        "100% approval",
+        "instant approval"
+      ],
+      "required_disclaimers": [],
+      "rate_rules": {
+        "must_be_range": true,
+        "no_guarantees": true
+      }
+    },
+    "financial_services": {
+      "banned_phrases": [
+        "guaranteed approval",
+        "guaranteed funding",
+        "guaranteed rates",
+        "no risk",
+        "100% approval",
+        "instant approval",
+        "pre-approved",
+        "no credit check required",
+        "bad credit OK",
+        "everyone qualifies"
+      ],
+      "required_disclaimers": [
+        "Terms and conditions apply",
+        "Rates and terms vary by lender"
+      ],
+      "rate_rules": {
+        "must_be_range": true,
+        "no_guarantees": true,
+        "require_disclaimer_near_rates": true
+      }
+    },
+    "healthcare": {
+      "banned_phrases": [
+        "cure",
+        "guaranteed results",
+        "miracle",
+        "100% effective",
+        "no side effects"
+      ],
+      "required_disclaimers": [
+        "Consult your healthcare provider"
+      ],
+      "rate_rules": {
+        "must_be_range": false,
+        "no_guarantees": true
+      }
+    },
+    "legal": {
+      "banned_phrases": [
+        "guaranteed outcome",
+        "we will win",
+        "100% success rate",
+        "guaranteed settlement"
+      ],
+      "required_disclaimers": [
+        "This is not legal advice"
+      ],
+      "rate_rules": {
+        "must_be_range": false,
+        "no_guarantees": true
+      }
+    }
+  },
+  "active_ruleset": "general",
+  "decay": {
+    "stale_threshold_days": 180,
+    "outdated_threshold_days": 365
+  }
+}
