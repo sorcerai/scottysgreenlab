@@ -1,0 +1,139 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import questionsData from '../../data/pseo-questions-final.json';
+
+const siteUrl = "https://scottysgardeninglab.com";
+
+// Group by pillar
+const pillarNames: Record<string, string> = {
+  'regenerative-agriculture': 'Regenerative Agriculture',
+  'composting': 'Composting',
+  'fermentation': 'Fermentation & Gut Health',
+  'soil-science': 'Soil Science',
+  'community-gardening': 'Community Gardening',
+  'food-system': 'Food System',
+};
+
+const pillarOrder = ['regenerative-agriculture', 'community-gardening', 'composting', 'fermentation', 'soil-science', 'food-system'];
+
+const grouped: Record<string, any[]> = {};
+for (const q of questionsData as any[]) {
+  const p = q.pillar;
+  if (!grouped[p]) grouped[p] = [];
+  grouped[p].push(q);
+}
+
+// Sort each group by rerank score
+for (const p of Object.keys(grouped)) {
+  grouped[p].sort((a: any, b: any) => (b.best_rerank_score || 0) - (a.best_rerank_score || 0));
+}
+
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "name": "Learn — Scotty's Gardening Lab",
+      "description": "Answers to common questions about regenerative agriculture, living soil, composting, fermentation, and community gardening from Scotty's Gardening Lab.",
+      "url": siteUrl + "/learn",
+      "publisher": { "@id": siteUrl + "/#organization" },
+      "isPartOf": { "@id": siteUrl + "/#website" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+        { "@type": "ListItem", "position": 2, "name": "Learn" }
+      ]
+    }
+  ]
+};
+---
+
+<Layout
+  title="Learn | Scotty's Gardening Lab"
+  description="Answers to common questions about regenerative agriculture, living soil, composting, fermentation, and community gardening. From Scotty's direct experience in Spring Branch, TX."
+  url={siteUrl + "/learn"}
+>
+  <Navbar />
+
+  <section class="py-16 px-4 md:px-8 bg-isotope min-h-screen">
+    <div class="max-w-7xl mx-auto">
+
+      <!-- Header -->
+      <div class="mb-12 flex items-baseline gap-4">
+        <h1 class="text-4xl md:text-6xl font-display font-bold uppercase">
+          Learn
+        </h1>
+        <div class="h-px bg-carbon flex-grow"></div>
+        <div class="font-mono text-sm">[{(questionsData as any[]).length} topics]</div>
+      </div>
+
+      <p class="font-sans text-lg text-carbon/70 max-w-2xl mb-16 leading-relaxed">
+        Real answers from Scotty's direct experience with regenerative agriculture, living soil, and fermentation in Spring Branch, Texas. No fluff — just what works.
+      </p>
+
+      <!-- Pillar sections -->
+      {pillarOrder.map((pillar) => {
+        const questions = grouped[pillar] || [];
+        if (questions.length === 0) return null;
+        return (
+          <section class="mb-16" id={pillar}>
+            <div class="flex items-baseline gap-4 mb-6">
+              <h2 class="text-2xl md:text-3xl font-display font-bold uppercase">
+                {pillarNames[pillar]}
+              </h2>
+              <div class="h-px bg-carbon/20 flex-grow"></div>
+              <div class="font-mono text-xs text-carbon/40">{questions.length}</div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-px bg-carbon/10 border border-carbon/10 rounded-lg overflow-hidden">
+              {questions.map((q: any) => (
+                <a
+                  href={`/learn/${q.slug}`}
+                  class="bg-isotope p-5 hover:bg-white transition-colors group"
+                >
+                  <h3 class="font-display text-base font-bold uppercase group-hover:text-sprout-dark transition-colors leading-snug">
+                    {q.question}
+                  </h3>
+                  {q.semantic_matches?.[0]?.excerpt && (
+                    <p class="font-sans text-sm text-carbon/50 mt-2 line-clamp-2 leading-relaxed">
+                      {q.semantic_matches[0].excerpt.slice(0, 120)}...
+                    </p>
+                  )}
+                </a>
+              ))}
+            </div>
+          </section>
+        );
+      })}
+
+      <!-- CTA -->
+      <div class="bg-carbon text-isotope p-8 md:p-12 rounded-lg text-center mt-8">
+        <h2 class="text-3xl font-display font-bold uppercase mb-4">
+          Got a Question Scotty Hasn't Answered?
+        </h2>
+        <p class="font-sans text-isotope/60 mb-6 max-w-md mx-auto">
+          Join the network and ask directly. Or come visit the lab in Spring Branch, TX.
+        </p>
+        <a href="/#compost" class="inline-block px-8 py-4 bg-sprout text-carbon font-mono uppercase text-sm rounded-full hover:bg-white transition-colors font-bold">
+          Join the Decay Cycle
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="bg-carbon text-isotope/40 py-12 border-t border-isotope/10">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="font-mono text-xs uppercase">
+        &copy; 2026 Scotty's Gardening Lab. All Systems Normal.
+      </div>
+      <div class="flex gap-6 font-mono text-xs uppercase">
+        <a href="#" class="hover:text-sprout transition-colors">Instagram</a>
+        <a href="#" class="hover:text-sprout transition-colors">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+</Layout>

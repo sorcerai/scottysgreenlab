@@ -1,0 +1,195 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navbar from '../../components/Navbar.astro';
+import questionsData from '../../data/pseo-questions-final.json';
+
+export function getStaticPaths() {
+  return questionsData.map((q: any) => ({
+    params: { slug: q.slug },
+    props: { question: q },
+  }));
+}
+
+const { question } = Astro.props;
+const siteUrl = "https://scottysgardeninglab.com";
+const pageUrl = `${siteUrl}/learn/${question.slug}`;
+
+// Get the best transcript excerpt as the answer
+const bestMatch = question.semantic_matches?.[0];
+const answer = bestMatch?.excerpt || '';
+const answerTitle = bestMatch?.title || '';
+
+// Build related matches for "Scotty also talks about" section
+const relatedMatches = (question.semantic_matches || []).slice(1, 3);
+
+// Pillar display names
+const pillarNames: Record<string, string> = {
+  'regenerative-agriculture': 'Regenerative Agriculture',
+  'composting': 'Composting',
+  'fermentation': 'Fermentation & Gut Health',
+  'soil-science': 'Soil Science',
+  'community-gardening': 'Community Gardening',
+  'food-system': 'Food System',
+};
+
+const pillarName = pillarNames[question.pillar] || question.pillar;
+
+// Schema: FAQPage + Article + BreadcrumbList
+const pageSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": question.question,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": answer
+        }
+      }]
+    },
+    {
+      "@type": "Article",
+      "headline": question.question,
+      "description": answer.slice(0, 155),
+      "url": pageUrl,
+      "author": {
+        "@type": "Organization",
+        "name": "Scotty's Gardening Lab",
+        "url": siteUrl
+      },
+      "publisher": { "@id": siteUrl + "/#organization" },
+      "isPartOf": { "@id": siteUrl + "/#website" },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": ["[data-speakable]", "article h1"]
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": siteUrl },
+        { "@type": "ListItem", "position": 2, "name": "Learn", "item": siteUrl + "/learn" },
+        { "@type": "ListItem", "position": 3, "name": pillarName, "item": siteUrl + "/learn?pillar=" + question.pillar },
+        { "@type": "ListItem", "position": 4, "name": question.question }
+      ]
+    }
+  ]
+};
+
+// Meta description from answer
+const metaDesc = answer.slice(0, 155).replace(/\n/g, ' ').trim() + '...';
+---
+
+<Layout
+  title={`${question.question} | Scotty's Gardening Lab`}
+  description={metaDesc}
+  url={pageUrl}
+  type="article"
+>
+  <Navbar />
+
+  <article class="py-16 px-4 md:px-8 bg-isotope min-h-screen">
+    <div class="max-w-3xl mx-auto">
+
+      <!-- Breadcrumbs -->
+      <nav class="font-mono text-xs uppercase tracking-widest text-carbon/40 mb-8">
+        <a href="/" class="hover:text-carbon transition-colors">Home</a>
+        <span class="mx-2">/</span>
+        <a href="/learn" class="hover:text-carbon transition-colors">Learn</a>
+        <span class="mx-2">/</span>
+        <span class="text-carbon/60">{pillarName}</span>
+      </nav>
+
+      <!-- Pillar tag -->
+      <div class="inline-block font-mono text-xs uppercase px-3 py-1 border border-carbon rounded-full mb-6 text-carbon/60">
+        {pillarName}
+      </div>
+
+      <!-- Question as H1 -->
+      <h1 class="text-4xl md:text-5xl font-display font-bold uppercase leading-tight mb-8" data-speakable>
+        {question.question}
+      </h1>
+
+      <!-- Direct answer block (speakable, AI-extractable) -->
+      <div class="bg-carbon text-isotope p-6 md:p-8 rounded-lg mb-10 border border-carbon" data-speakable>
+        <div class="font-mono text-xs uppercase text-sprout mb-3 tracking-widest">
+          Scotty's Answer
+        </div>
+        <p class="font-sans text-lg md:text-xl leading-relaxed">
+          {answer}
+        </p>
+        {answerTitle && (
+          <div class="font-mono text-xs text-isotope/40 mt-4 pt-4 border-t border-isotope/10">
+            From: {answerTitle}
+          </div>
+        )}
+      </div>
+
+      <!-- Extended content from related matches -->
+      {relatedMatches.length > 0 && (
+        <section class="mb-10">
+          <h2 class="text-2xl font-display font-bold uppercase mb-6">
+            More from Scotty on This Topic
+          </h2>
+          {relatedMatches.map((match: any) => (
+            <div class="border border-carbon/20 rounded-lg p-6 mb-4 hover:bg-white transition-colors">
+              <h3 class="font-display text-lg font-bold uppercase mb-2">
+                {match.title}
+              </h3>
+              <p class="font-sans text-base leading-relaxed text-carbon/80">
+                {match.excerpt}
+              </p>
+            </div>
+          ))}
+        </section>
+      )}
+
+      <!-- About the source -->
+      <section class="border-t border-carbon/20 pt-8 mb-10">
+        <h2 class="text-2xl font-display font-bold uppercase mb-4">
+          About This Answer
+        </h2>
+        <p class="font-sans text-base leading-relaxed text-carbon/70">
+          This answer comes from Scotty's direct teaching — drawn from his video library on regenerative agriculture, living soil, and fermentation. Scotty's Gardening Lab is a regenerative agriculture operation in Spring Branch, Texas, producing nutrient-dense food through living soil science and lacto-fermentation.
+        </p>
+      </section>
+
+      <!-- CTA -->
+      <div class="bg-carbon text-isotope p-6 md:p-8 rounded-lg text-center">
+        <div class="font-mono text-xs uppercase text-sprout mb-3 tracking-widest">
+          Want to learn more?
+        </div>
+        <h2 class="text-2xl font-display font-bold uppercase mb-4">
+          Join the Decay Cycle
+        </h2>
+        <p class="font-sans text-isotope/60 mb-6 max-w-md mx-auto">
+          Get notified about new harvests, fermentation batches, and composting workshops in Spring Branch, TX.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/#menu" class="px-8 py-4 bg-sprout text-carbon font-mono uppercase text-sm rounded-full hover:bg-white transition-colors font-bold">
+            See the Market Menu
+          </a>
+          <a href="/#compost" class="px-8 py-4 border border-isotope/30 text-isotope font-mono uppercase text-sm rounded-full hover:bg-isotope/10 transition-colors">
+            Join the Network
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <footer class="bg-carbon text-isotope/40 py-12 border-t border-isotope/10">
+    <div class="max-w-7xl mx-auto px-4 md:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div class="font-mono text-xs uppercase">
+        &copy; 2026 Scotty's Gardening Lab. All Systems Normal.
+      </div>
+      <div class="flex gap-6 font-mono text-xs uppercase">
+        <a href="#" class="hover:text-sprout transition-colors">Instagram</a>
+        <a href="#" class="hover:text-sprout transition-colors">Email</a>
+      </div>
+    </div>
+  </footer>
+
+  <script type="application/ld+json" set:html={JSON.stringify(pageSchema)} />
+</Layout>
