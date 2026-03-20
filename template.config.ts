@@ -212,7 +212,7 @@ const config: TemplateConfig = {
       "regenerative agriculture Texas",
       "fermented kimchi Spring Branch",
       "nutrient dense food Texas",
-      "no-till farming Hill Country",
+      "no-till farming Houston area",
       "lacto-fermentation benefits",
       "composting Spring Branch TX",
     ],
