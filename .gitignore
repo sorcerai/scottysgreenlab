@@ -38,3 +38,12 @@ models/
 # Content pipeline tracking (local state)
 data/content-pipeline/tracking/
 data/content-pipeline/briefs/
+
+# ClawRank runtime artifacts (not needed for website)
+artifacts/clawrank/logs/
+artifacts/clawrank/checkpoints/
+artifacts/clawrank/decisions/
+artifacts/clawrank/drafts/
+artifacts/clawrank/run-*/
+artifacts/clawrank/world-state-*.json
+artifacts/clawrank/decision-*.json
