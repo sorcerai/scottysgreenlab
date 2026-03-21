@@ -56,7 +56,7 @@ gpu_models:
   intent_classifier: "http://100.66.51.21:8002/intent"
   query_fanout: "http://100.66.51.21:8789/fanout"
   sentiment: "http://100.66.51.21:8002/sentiment"
-  reranker: "http://100.66.51.21:8788/rerank"
+  reranker: "http://100.66.51.21:8002/predict/qwen-rerank"
   embedder: "local://e5-base-v2"
 
 security:

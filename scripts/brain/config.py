@@ -60,7 +60,7 @@ if not DB_URL:
 
 ACTIVE_MODEL = os.environ.get("BRAIN_MODEL", "intfloat/e5-base-v2")
 SEARCH_MODE = os.environ.get("BRAIN_SEARCH_MODE", "hybrid")  # vector, fulltext, hybrid
-RERANKER = os.environ.get("BRAIN_RERANKER", "http://100.66.51.21:8788/rerank")
+RERANKER = os.environ.get("BRAIN_RERANKER", "http://100.66.51.21:8002/predict/qwen-rerank")
 
 # ---------------------------------------------------------------------------
 # Search parameters

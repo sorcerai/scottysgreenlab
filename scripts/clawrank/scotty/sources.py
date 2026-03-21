@@ -25,7 +25,7 @@ class GpuModelClient:
 
 
 class IntentClassifier(GpuModelClient):
-    def __init__(self, url: str = "http://100.66.51.21:8002/intent"):
+    def __init__(self, url: str = "http://100.66.51.21:8002/predict/intent"):
         super().__init__(url)
 
     def classify(self, query: str) -> str | None:
@@ -43,7 +43,7 @@ class QueryFanout(GpuModelClient):
 
 
 class SentimentAnalyzer(GpuModelClient):
-    def __init__(self, url: str = "http://100.66.51.21:8002/sentiment"):
+    def __init__(self, url: str = "http://100.66.51.21:8002/predict/sentiment"):
         super().__init__(url)
 
     def analyze(self, text: str) -> dict | None:
@@ -51,7 +51,7 @@ class SentimentAnalyzer(GpuModelClient):
 
 
 class Reranker(GpuModelClient):
-    def __init__(self, url: str = "http://100.66.51.21:8788/rerank"):
+    def __init__(self, url: str = "http://100.66.51.21:8002/predict/qwen-rerank"):
         super().__init__(url)
 
     def rerank(self, query: str, documents: list[str], top_k: int = 5) -> list[dict] | None:
