@@ -380,6 +380,34 @@ class PipelineExecutor:
         if self.domain_adapter is not None and stage.value in _VOICE_RULE_STAGES:
             vars_["voice_rules"] = self.domain_adapter.load_voice_rules()
 
+        # Inject reranked transcript evidence for research / writing stages
+        _EVIDENCE_STAGES = {9, 10, 11, 12}
+        if self.domain_adapter is not None and stage.value in _EVIDENCE_STAGES:
+            keyword = context.get("target_keyword", "") or vars_.get("topic", "")
+            if keyword:
+                try:
+                    results = self.domain_adapter.search_brain(keyword, top_k=10)
+                    if results:
+                        # Format top transcript matches for the prompt
+                        evidence_lines = []
+                        for i, r in enumerate(results[:5], 1):
+                            title = r.get("title", "")[:80]
+                            excerpt = r.get("excerpt", r.get("text", ""))[:300]
+                            score = r.get("rerank_score", r.get("similarity", 0))
+                            evidence_lines.append(
+                                f"{i}. [{score:.2f}] {title}\n   {excerpt}"
+                            )
+                        vars_["transcript_evidence"] = "\n\n".join(evidence_lines)
+                        logger.info(
+                            "Stage %d: injected %d reranked transcript chunks",
+                            stage.value, len(evidence_lines),
+                        )
+                    else:
+                        vars_["transcript_evidence"] = "(no matching transcripts found)"
+                except Exception as e:
+                    logger.warning("Brain search failed for stage %d: %s", stage.value, e)
+                    vars_["transcript_evidence"] = "(brain search unavailable)"
+
         return vars_
 
     def _parse_response(self, text: str) -> dict[str, Any]:

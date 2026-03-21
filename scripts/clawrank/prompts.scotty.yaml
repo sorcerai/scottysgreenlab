@@ -174,10 +174,14 @@ stages:
       Content type: {content_type}
       Brief data: {research_brief}
 
+      SCOTTY'S TRANSCRIPT EVIDENCE (reranked by Qwen3 from brain DB -- these are real quotes from Scotty's TikTok videos):
+      {transcript_evidence}
+
       EXPANDED QUERIES (from DEJAN MT5-Large fan-out model -- real user search variants):
       {expanded_queries}
 
-      Use these expanded queries to identify:
+      Use the transcript evidence above to ground the brief in Scotty's real experience.
+      Use the expanded queries to identify:
       - Which sub-questions the article MUST answer to capture AI citations
       - Which angles align with Scotty's first-hand transcript knowledge
       - Additional Direct Answer targets beyond the obvious ones
@@ -223,12 +227,15 @@ stages:
       Target keyword: {target_keyword}
       Research brief: {stage_9_output}
 
+      SCOTTY'S TRANSCRIPT EVIDENCE (reranked by Qwen3 -- real quotes):
+      {transcript_evidence}
+
       Find and compile two categories of data:
 
-      1. SCOTTY'S PRIMARY DATA (from transcript brain search):
-         - Search the brain for transcript chunks relevant to: {target_keyword}
-         - Extract specific claims, techniques, and observations Scotty makes
-         - Note which video context each comes from if available
+      1. SCOTTY'S PRIMARY DATA (from the transcript evidence above):
+         - Extract specific claims, techniques, and observations from the transcript chunks
+         - These are REAL quotes from Scotty's TikTok videos -- use them directly
+         - Note which claims are strongest and most relevant to the keyword
          - These are the most valuable -- Scotty's direct experience is original
 
       2. EXTERNAL AUTHORITATIVE SOURCES:
@@ -277,6 +284,9 @@ stages:
       Title: {title}
       Research brief: {stage_9_output}
       Data collected: {stage_10_output}
+
+      SCOTTY'S TRANSCRIPT EVIDENCE (reranked by Qwen3 -- real quotes):
+      {transcript_evidence}
 
       EXPANDED QUERIES (real user search variants from DEJAN fan-out):
       {expanded_queries}
@@ -335,6 +345,9 @@ stages:
 
       Evidence and data:
       {evidence}
+
+      SCOTTY'S REAL TRANSCRIPT QUOTES (reranked by relevance -- weave these into the article):
+      {transcript_evidence}
 
       Competitor analysis (what to beat):
       {competitor_content}
