@@ -235,6 +235,27 @@ class PipelineExecutor:
                 except Exception as e:
                     logger.warning("Scottynizer failed (non-fatal): %s", e)
 
+            # Publish hook: stage 22 writes article JSON + updates index
+            if stage.value == 22 and self.domain_adapter is not None:
+                try:
+                    from scripts.clawrank.scotty.publish import publish_article
+                    # Find the scottynized stage-12 output to publish
+                    draft_path = run_dir / "stage-12-content_draft.json"
+                    if draft_path.exists():
+                        raw = draft_path.read_text()
+                        if raw.startswith("```"):
+                            import re as _re
+                            raw = _re.sub(r"^```\w*\n", "", raw)
+                            raw = _re.sub(r"\n```\s*$", "", raw)
+                        draft = json.loads(raw)
+                        paths = publish_article(draft)
+                        logger.info(
+                            "Stage 22: Published to %s + index updated",
+                            paths["article_path"],
+                        )
+                except Exception as e:
+                    logger.warning("Publish hook failed (non-fatal): %s", e)
+
             # Parse response and update context
             parsed = self._parse_response(response_text)
             context[f"stage_{stage.value}_output"] = parsed

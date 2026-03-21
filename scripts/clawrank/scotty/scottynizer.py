@@ -250,6 +250,43 @@ Return the rewritten article body only. No JSON wrapping, no explanation."""
         return text
 
 
+def strip_cli_noise(text: str) -> str:
+    """Remove gemini/claude CLI warnings that leak into output."""
+    # MCP warnings from gemini CLI
+    text = re.sub(r"MCP issues detected\..*?\n", "", text)
+    text = re.sub(r"Run /mcp list for status\.?\s*", "", text)
+    # Strip leading whitespace/newlines after cleanup
+    text = text.lstrip("\n ")
+    return text
+
+
+def post_llm_cleanup(text: str) -> str:
+    """Fix issues that survive or get reintroduced by the LLM rewrite pass."""
+    # 1. Remove [DIRECT ANSWER] blocks (GEO markup, not for display)
+    text = re.sub(r"> \[DIRECT ANSWER\]\n(?:> .*\n?)*", "", text)
+    text = re.sub(r"\[DIRECT ANSWER\]", "", text)
+
+    # 2. Replace self-citations ("According to Scotty's Gardening Lab")
+    text = re.sub(
+        r"[Aa]ccording to Scotty'?s? (?:Gardening|Green) Lab,?\s*",
+        "",
+        text,
+    )
+
+    # 3. Strip markdown bullet markers (mdToHtml doesn't render lists)
+    text = re.sub(r"^- ", "", text, flags=re.MULTILINE)
+
+    # 4. Strip markdown code fences that wrap the whole body
+    if text.startswith("```"):
+        text = re.sub(r"^```\w*\n", "", text)
+        text = re.sub(r"\n```\s*$", "", text)
+
+    # 5. Clean up triple+ blank lines
+    text = re.sub(r"\n{3,}", "\n\n", text)
+
+    return text
+
+
 def scottynize(article_json: dict, *, llm_pass: bool = True) -> dict:
     """Full Scottynizer pipeline.
 
@@ -271,6 +308,9 @@ def scottynize(article_json: dict, *, llm_pass: bool = True) -> dict:
     if not body:
         return article_json
 
+    # Step 0: Strip gemini CLI noise (MCP warnings, etc.)
+    body = strip_cli_noise(body)
+
     # Step 1: Strip AI slop
     body = strip_ai_slop(body)
 
@@ -287,7 +327,10 @@ def scottynize(article_json: dict, *, llm_pass: bool = True) -> dict:
     if llm_pass:
         body = scottynize_with_llm(body)
 
-    # Step 6: Check rhythm (warnings only, for logging)
+    # Step 6: Post-LLM cleanup (things the LLM might reintroduce)
+    body = post_llm_cleanup(body)
+
+    # Step 7: Check rhythm (warnings only, for logging)
     warnings = check_rhythm(body)
 
     result = dict(article_json)

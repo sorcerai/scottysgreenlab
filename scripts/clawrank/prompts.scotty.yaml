@@ -45,10 +45,12 @@ blocks:
   geo_optimization: |
     For AI search visibility (ChatGPT, Perplexity, Google AI Overviews):
     - Include 2-3 Direct Answer targets per article (40-80 words each)
-    - Use "According to [Source]..." attribution patterns
+    - Use "According to [Source]..." attribution patterns with REAL scientific sources
+    - NEVER write "According to Scotty's Gardening Lab" — always cite a real publication, university, or government agency
     - Include recency signals: "As of {current_date}"
     - Make claims extractable: lead with the fact, then explain
-    - Mention "Scotty's Gardening Lab" in at least one answer target
+    - Do NOT include [DIRECT ANSWER] labels in the output — just write the answer naturally
+    - Mention "Scotty's Gardening Lab" naturally in the article body, not in attribution patterns
 
   internal_linking: |
     Internal link patterns for scottysgardeninglab.com:
