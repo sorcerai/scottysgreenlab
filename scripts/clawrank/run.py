@@ -331,7 +331,7 @@ def cmd_auto(args: argparse.Namespace) -> int:
     t0 = time.time()
 
     # Step 1: Check LLM backends
-    from scripts.clawrank.acpx_adapter import check_backends_installed, AcpxLLMAdapter
+    from scripts.clawrank.core.acpx_adapter import check_backends_installed, AcpxLLMAdapter
 
     backends = check_backends_installed()
     if not backends.get("acpx") and not backends.get("claude_cli"):
@@ -371,8 +371,8 @@ def cmd_auto(args: argparse.Namespace) -> int:
         backend=args.backend,
         session_prefix="clawrank-scotty",
     )
-    from scripts.clawrank.prompts_loader import PromptManager
-    from scripts.clawrank.evolution import EvolutionStore
+    from scripts.clawrank.core.prompts_loader import PromptManager
+    from scripts.clawrank.core.evolution import EvolutionStore
     from scripts.clawrank.core.pipeline.executor import PipelineExecutor
 
     prompts = PromptManager()
@@ -450,7 +450,7 @@ def cmd_batch(args: argparse.Namespace) -> int:
     """Batch mode: write from existing briefs."""
     print("\n=== ClawRank Batch Mode ===\n")
 
-    from scripts.clawrank.acpx_adapter import check_backends_installed, AcpxLLMAdapter
+    from scripts.clawrank.core.acpx_adapter import check_backends_installed, AcpxLLMAdapter
 
     backends = check_backends_installed()
     if not backends.get("acpx") and not backends.get("claude_cli"):
@@ -492,8 +492,8 @@ def cmd_batch(args: argparse.Namespace) -> int:
 
     # Initialize pipeline
     llm = AcpxLLMAdapter(backend=args.backend, session_prefix="clawrank-scotty")
-    from scripts.clawrank.prompts_loader import PromptManager
-    from scripts.clawrank.evolution import EvolutionStore
+    from scripts.clawrank.core.prompts_loader import PromptManager
+    from scripts.clawrank.core.evolution import EvolutionStore
     from scripts.clawrank.core.pipeline.executor import PipelineExecutor
 
     prompts = PromptManager()
@@ -539,7 +539,7 @@ def cmd_research(args: argparse.Namespace) -> int:
     """Research mode: stages 1-8 only, output briefs."""
     print("\n=== ClawRank Research Mode ===\n")
 
-    from scripts.clawrank.acpx_adapter import check_backends_installed, AcpxLLMAdapter
+    from scripts.clawrank.core.acpx_adapter import check_backends_installed, AcpxLLMAdapter
 
     backends = check_backends_installed()
     if not backends.get("acpx") and not backends.get("claude_cli"):
@@ -555,8 +555,8 @@ def cmd_research(args: argparse.Namespace) -> int:
         return 0
 
     llm = AcpxLLMAdapter(backend=args.backend, session_prefix="clawrank-scotty")
-    from scripts.clawrank.prompts_loader import PromptManager
-    from scripts.clawrank.evolution import EvolutionStore
+    from scripts.clawrank.core.prompts_loader import PromptManager
+    from scripts.clawrank.core.evolution import EvolutionStore
     from scripts.clawrank.core.pipeline.executor import PipelineExecutor
 
     prompts = PromptManager()
