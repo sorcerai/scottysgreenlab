@@ -41,7 +41,7 @@ knowledge_base:
 llm:
   provider: cli
   default_backend: gemini
-  heavy_backend: claude
+  heavy_backend: gemini
   base_url: ""
   api_key_env: ""
   primary_model: ""

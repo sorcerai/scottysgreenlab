@@ -369,6 +369,7 @@ def cmd_auto(args: argparse.Namespace) -> int:
     # Step 6: Initialize pipeline
     llm = AcpxLLMAdapter(
         backend=args.backend,
+        heavy_backend=config.llm.heavy_backend if config else args.backend,
         session_prefix="clawrank-scotty",
     )
     from scripts.clawrank.core.prompts_loader import PromptManager
@@ -491,7 +492,11 @@ def cmd_batch(args: argparse.Namespace) -> int:
         return 0
 
     # Initialize pipeline
-    llm = AcpxLLMAdapter(backend=args.backend, session_prefix="clawrank-scotty")
+    llm = AcpxLLMAdapter(
+        backend=args.backend,
+        heavy_backend=config.llm.heavy_backend if config else args.backend,
+        session_prefix="clawrank-scotty",
+    )
     from scripts.clawrank.core.prompts_loader import PromptManager
     from scripts.clawrank.core.evolution import EvolutionStore
     from scripts.clawrank.core.pipeline.executor import PipelineExecutor
@@ -554,7 +559,11 @@ def cmd_research(args: argparse.Namespace) -> int:
         print("  [DRY RUN] Would run research stages 1-8")
         return 0
 
-    llm = AcpxLLMAdapter(backend=args.backend, session_prefix="clawrank-scotty")
+    llm = AcpxLLMAdapter(
+        backend=args.backend,
+        heavy_backend=config.llm.heavy_backend if config else args.backend,
+        session_prefix="clawrank-scotty",
+    )
     from scripts.clawrank.core.prompts_loader import PromptManager
     from scripts.clawrank.core.evolution import EvolutionStore
     from scripts.clawrank.core.pipeline.executor import PipelineExecutor

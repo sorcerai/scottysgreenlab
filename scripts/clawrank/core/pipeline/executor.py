@@ -220,6 +220,21 @@ class PipelineExecutor:
             artifact_path = run_dir / f"stage-{stage.value:02d}-{stage_name}.json"
             artifact_path.write_text(response_text, encoding="utf-8")
 
+            # Scottynizer hook: run voice pass after content_draft (stage 12)
+            if stage.value == 12 and self.domain_adapter is not None:
+                try:
+                    from scripts.clawrank.scotty.scottynizer import scottynize
+                    parsed_draft = self._parse_response(response_text)
+                    scottynized = scottynize(parsed_draft, llm_pass=True)
+                    scottynized_text = json.dumps(scottynized, indent=2, ensure_ascii=False)
+                    scottynized_path = run_dir / f"stage-{stage.value:02d}-{stage_name}-scottynized.json"
+                    scottynized_path.write_text(scottynized_text, encoding="utf-8")
+                    response_text = scottynized_text
+                    artifact_path.write_text(response_text, encoding="utf-8")
+                    logger.info("Stage 12: Scottynizer applied, saved to %s", scottynized_path.name)
+                except Exception as e:
+                    logger.warning("Scottynizer failed (non-fatal): %s", e)
+
             # Parse response and update context
             parsed = self._parse_response(response_text)
             context[f"stage_{stage.value}_output"] = parsed
