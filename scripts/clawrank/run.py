@@ -205,7 +205,7 @@ def cmd_validate(config_path: str) -> int:
     with path.open() as f:
         data = yaml.safe_load(f) or {}
 
-    from scripts.clawrank.config_loader import validate_config
+    from scripts.clawrank.core.config_loader import validate_config
     result = validate_config(data, project_root=path.parent, check_paths=True)
 
     if result.ok:
@@ -615,7 +615,7 @@ def _load_config(config_path: str) -> Any:
             return None
 
     try:
-        from scripts.clawrank.config_loader import CRConfig
+        from scripts.clawrank.core.config_loader import CRConfig
         config = CRConfig.load(path, check_paths=False)
         logger.info("Config loaded: %s", path)
         return config
