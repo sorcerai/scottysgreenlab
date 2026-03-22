@@ -31,11 +31,18 @@ blocks:
     - No filler content -- every sentence must teach or persuade
     - Ground all advice in Scotty's actual experience from 359 TikTok videos
 
-    PRODUCT CATEGORIES (do not mix these up):
-    - LIVING SOIL products (grown in Scotty's soil beds): Living Soil Salad Mix, Spicy Radishes
-    - FERMENTATION products (made from market produce, then fermented): Fermented Kimchi, Escabeche
-    - Kimchi is NOT a living soil product. It uses Lactobacillus bacteria (which exists in soil), but the cabbage is market produce.
+    PRODUCT CATEGORIES (never conflate these):
+    - LIVING SOIL products (grown in Scotty's soil): Living Soil Salad Mix, Spicy Radishes
+    - FERMENTATION products (preserved with lacto-bacteria): Fermented Kimchi, Escabeche
+    Kimchi is NOT a "living soil" product. The salad mix IS. Keep these categories accurate.
     - Only attribute "living soil" benefits to products actually grown in Scotty's regenerative beds.
+
+    GUT MICROBIOME BIOLOGY (from Scotty):
+    - Soil bacteria from food does NOT permanently colonize your gut
+    - The bacteria that comes in with food goes out with food
+    - Transient soil bacteria shares DNA (horizontal gene transfer) with your existing gut microbes, making them stronger and more diverse
+    - NEVER claim that eating soil bacteria "repopulates", "seeds", or "colonizes" the gut microbiome
+    - Correct mechanism: transient exposure -> horizontal gene transfer -> strengthened resident microbiome
 
   quality_standard: |
     BANNED phrases (never use): delve, landscape, leverage, comprehensive guide, game-changer, synergy, cutting-edge, robust, streamline, paradigm, holistic approach, deep dive into, navigate the, realm of, embark on, foster, harness, in today's world, it's important to note, at the end of the day
@@ -48,12 +55,18 @@ blocks:
     - AI-slop score <= 0.3
     - Citation density: 3 per 500 words minimum
 
-    CRITICAL BIOLOGY RULES (from Scotty):
-    - Soil/food bacteria do NOT permanently colonize or "repopulate" the gut
-    - Transient bacteria share DNA with resident microbes (horizontal gene transfer), strengthening them
-    - Bacteria that comes in with food goes out with food
-    - Never say: "seeds your gut", "repopulates your microbiome", "colonizes your intestines"
+    CRITICAL BIOLOGY RULES (from Scotty -- gut microbiome):
+    - Soil bacteria from food does NOT permanently colonize your gut
+    - The bacteria that comes in with food goes out with food
+    - Transient soil bacteria shares DNA (horizontal gene transfer) with your existing gut microbes, making them stronger and more diverse
+    - NEVER claim that eating soil bacteria "repopulates", "seeds", or "colonizes" the gut microbiome
+    - Correct mechanism: transient exposure -> horizontal gene transfer -> strengthened resident microbiome
     - Correct framing: "strengthens your existing microbiome", "challenges your gut bacteria to adapt", "provides genetic diversity through horizontal gene transfer"
+
+    PRODUCT CATEGORY RULES (from Scotty):
+    - LIVING SOIL products (grown in Scotty's soil): Living Soil Salad Mix, Spicy Radishes
+    - FERMENTATION products (preserved with lacto-bacteria): Fermented Kimchi, Escabeche
+    - Kimchi is NOT a "living soil" product. The salad mix IS. Never conflate these categories.
 
   geo_optimization: |
     For AI search visibility (ChatGPT, Perplexity, Google AI Overviews):

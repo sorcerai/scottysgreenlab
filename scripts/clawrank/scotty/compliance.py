@@ -79,6 +79,21 @@ _SPRING_BRANCH_BAD_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
+# Gut microbiome biology: soil bacteria do NOT permanently colonize the gut.
+# Ban phrases that claim colonization / seeding / repopulation.
+_GUT_COLONIZE_PATTERNS: list[re.Pattern[str]] = [
+    re.compile(r"repopulates?\s+(?:your\s+)?gut", re.IGNORECASE),
+    re.compile(r"seeds?\s+(?:your\s+)?gut\s+microbiome", re.IGNORECASE),
+    re.compile(r"colonizes?\s+(?:your\s+)?gut", re.IGNORECASE),
+]
+
+# Product category accuracy: kimchi is a FERMENTATION product, not a living soil product.
+# Flag "kimchi" appearing within 80 chars of "living soil".
+_KIMCHI_LIVING_SOIL_PATTERN = re.compile(
+    r"kimchi.{0,80}living\s+soil|living\s+soil.{0,80}kimchi",
+    re.IGNORECASE,
+)
+
 # Structural thresholds
 MIN_WORD_COUNT = 1500
 MAX_WORD_COUNT = 3500
@@ -424,6 +439,32 @@ def _score_compliance(article: dict) -> tuple[float, list[str]]:
         scores.append(0.0)
         violations.append(
             "location_error: Spring Branch is a Houston neighborhood, not a Hill Country town"
+        )
+    else:
+        scores.append(100.0)
+
+    # Gut microbiome biology: ban claims that soil bacteria colonizes/seeds/repopulates the gut
+    gut_violations_found: list[str] = []
+    for pattern in _GUT_COLONIZE_PATTERNS:
+        match = pattern.search(full_text)
+        if match:
+            gut_violations_found.append(match.group())
+    if gut_violations_found:
+        scores.append(0.0)
+        for phrase in gut_violations_found:
+            violations.append(
+                f'biology_error: "{phrase}" -- soil bacteria do NOT colonize the gut; '
+                "they share DNA via horizontal gene transfer with resident microbes"
+            )
+    else:
+        scores.append(100.0)
+
+    # Product category accuracy: kimchi is fermentation, NOT living soil
+    if _KIMCHI_LIVING_SOIL_PATTERN.search(full_text):
+        scores.append(0.0)
+        violations.append(
+            "product_category_error: kimchi is a FERMENTATION product, not a living soil product -- "
+            "living soil products are: Living Soil Salad Mix, Spicy Radishes"
         )
     else:
         scores.append(100.0)
