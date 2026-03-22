@@ -220,6 +220,22 @@ class PipelineExecutor:
             artifact_path = run_dir / f"stage-{stage.value:02d}-{stage_name}.json"
             artifact_path.write_text(response_text, encoding="utf-8")
 
+            # Citation verifier hook: verify citations after evidence_build (stage 11)
+            if stage.value == 11 and self.domain_adapter is not None:
+                try:
+                    from scripts.clawrank.scotty.citation_verifier import verify_article_citations
+                    parsed_evidence = self._parse_response(response_text)
+                    stats = verify_article_citations(parsed_evidence)
+                    verified_text = json.dumps(parsed_evidence, indent=2, ensure_ascii=False)
+                    artifact_path.write_text(verified_text, encoding="utf-8")
+                    response_text = verified_text
+                    logger.info(
+                        "Stage 11: Citations verified — %d/%d confirmed, %d URLs updated",
+                        stats["verified"], stats["total"], stats["updated"],
+                    )
+                except Exception as e:
+                    logger.warning("Citation verifier failed (non-fatal): %s", e)
+
             # Scottynizer hook: run voice pass after content_draft (stage 12)
             if stage.value == 12 and self.domain_adapter is not None:
                 try:
