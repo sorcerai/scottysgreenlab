@@ -79,20 +79,57 @@ _SPRING_BRANCH_BAD_PATTERN = re.compile(
     re.IGNORECASE,
 )
 
-# Gut microbiome biology: soil bacteria do NOT permanently colonize the gut.
-# Ban phrases that claim colonization / seeding / repopulation.
-_GUT_COLONIZE_PATTERNS: list[re.Pattern[str]] = [
-    re.compile(r"repopulates?\s+(?:your\s+)?gut", re.IGNORECASE),
-    re.compile(r"seeds?\s+(?:your\s+)?gut\s+microbiome", re.IGNORECASE),
-    re.compile(r"colonizes?\s+(?:your\s+)?gut", re.IGNORECASE),
-]
+# LLM-based fact checker for biology and product category errors.
+# Uses gemini (fast, cheap) to catch nuanced violations regex would miss.
+def _llm_fact_check(text: str) -> list[str]:
+    """Use a small LLM to check for factual and product category errors.
 
-# Product category accuracy: kimchi is a FERMENTATION product, not a living soil product.
-# Flag "kimchi" appearing within 80 chars of "living soil".
-_KIMCHI_LIVING_SOIL_PATTERN = re.compile(
-    r"kimchi.{0,80}living\s+soil|living\s+soil.{0,80}kimchi",
-    re.IGNORECASE,
-)
+    Catches nuanced violations that regex can't — understands context,
+    paraphrasing, and implicit claims.
+
+    Returns list of violation strings, empty if clean.
+    """
+    import subprocess, json as _json
+
+    check_text = text[:4000]
+
+    prompt = (
+        "You are a fact-checker for Scotty's Gardening Lab content. "
+        "Check this text for TWO specific errors:\n\n"
+        "RULE 1 — GUT MICROBIOME BIOLOGY:\n"
+        "Soil bacteria from food does NOT permanently colonize your gut. "
+        "The bacteria comes in and goes out. The correct mechanism is: "
+        "transient bacteria shares DNA (horizontal gene transfer) with "
+        "existing gut microbes, making them stronger. Flag ANY claim that "
+        'soil bacteria "repopulates", "seeds", "colonizes", "permanently '
+        'settles in", or "takes up residence in" the gut. Also flag claims '
+        'that eating fermented food "adds new bacteria to your gut" permanently.\n\n'
+        "RULE 2 — PRODUCT CATEGORIES:\n"
+        "- LIVING SOIL products (grown in Scotty's soil): Living Soil Salad Mix, Spicy Radishes\n"
+        "- FERMENTATION products (preserved with lacto-bacteria): Fermented Kimchi, Escabeche\n"
+        "Flag if kimchi or escabeche are described as 'living soil' products, "
+        "or if their ingredients are claimed to come from Scotty's soil beds.\n\n"
+        f"TEXT TO CHECK:\n{check_text}\n\n"
+        "Respond with ONLY a JSON array of violation strings. "
+        "If no violations, respond with []."
+    )
+
+    try:
+        result = subprocess.run(
+            ["gemini", "-p", prompt],
+            capture_output=True, text=True, timeout=30,
+        )
+        if result.returncode == 0 and result.stdout.strip():
+            raw = result.stdout.strip()
+            if raw.startswith("```"):
+                raw = re.sub(r"^```\w*\n", "", raw)
+                raw = re.sub(r"\n```\s*$", "", raw)
+            violations = _json.loads(raw)
+            if isinstance(violations, list):
+                return [str(v) for v in violations if v]
+        return []
+    except Exception:
+        return []  # Non-fatal
 
 # Structural thresholds
 MIN_WORD_COUNT = 1500
@@ -443,29 +480,13 @@ def _score_compliance(article: dict) -> tuple[float, list[str]]:
     else:
         scores.append(100.0)
 
-    # Gut microbiome biology: ban claims that soil bacteria colonizes/seeds/repopulates the gut
-    gut_violations_found: list[str] = []
-    for pattern in _GUT_COLONIZE_PATTERNS:
-        match = pattern.search(full_text)
-        if match:
-            gut_violations_found.append(match.group())
-    if gut_violations_found:
+    # LLM fact check: biology errors + product category errors
+    # Uses gemini (fast/cheap) to catch nuanced violations
+    llm_violations = _llm_fact_check(full_text)
+    if llm_violations:
         scores.append(0.0)
-        for phrase in gut_violations_found:
-            violations.append(
-                f'biology_error: "{phrase}" -- soil bacteria do NOT colonize the gut; '
-                "they share DNA via horizontal gene transfer with resident microbes"
-            )
-    else:
-        scores.append(100.0)
-
-    # Product category accuracy: kimchi is fermentation, NOT living soil
-    if _KIMCHI_LIVING_SOIL_PATTERN.search(full_text):
-        scores.append(0.0)
-        violations.append(
-            "product_category_error: kimchi is a FERMENTATION product, not a living soil product -- "
-            "living soil products are: Living Soil Salad Mix, Spicy Radishes"
-        )
+        for v in llm_violations:
+            violations.append(v)
     else:
         scores.append(100.0)
 
